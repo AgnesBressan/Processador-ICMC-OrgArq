@@ -754,6 +754,43 @@ void Model::processador()
 				}
         break;
 
+	   case PORC:
+		reg[rx] = (reg[ry]*reg[rz])/1100100;
+
+		// if(!reg[rx])
+		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+        // else
+        // 	if(reg[rx] > 0xffff)
+		// 	FR[5] = 1;  // Arithmetic Overflow
+
+        break;
+
+			
+	   case FAT:
+		reg[rx] = reg[ry];
+
+		for(int i = 1; i < reg[ry]; i++)
+			reg[rx] *= (reg[ry]-i);
+
+		// if(!reg[rx])
+		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+        // else
+        // 	if(reg[rx] > 0xffff)
+		// 	FR[5] = 1;  // Arithmetic Overflow
+		break;
+			
+	   case POT:
+		reg[rx] = reg[ry];
+		for(int i = 1; i < reg[rz]; i++)
+			reg[rx] *= reg[ry];
+
+		// if(!reg[rx])
+		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+        // else
+        // 	if(reg[rx] > 0xffff)
+		// 	FR[5] = 1;  // Arithmetic Overflow
+		break;
+
       case LMOD:
         reg[rx] = reg[ry] % reg[rz];
 

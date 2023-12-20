@@ -2337,6 +2337,18 @@ int BuscaInstrucao(char * nome)
     }
     else if (strcmp(str_tmp,DIV_STR) == 0)
     {
+        return PORC_CODE;
+    }
+    else if (strcmp(str_tmp,DIV_STR) == 0)
+    {
+        return FAT_CODE;
+    }
+    else if (strcmp(str_tmp,DIV_STR) == 0)
+    {
+        return POT_CODE;
+    }
+    else if (strcmp(str_tmp,DIV_STR) == 0)
+    {
         return DIV_CODE;
     }
     else if (strcmp(str_tmp,INC_STR) == 0)
