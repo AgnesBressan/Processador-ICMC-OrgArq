@@ -19,7 +19,7 @@ Essa operação é fundamental em diversos contextos, como cálculos matemático
 
 ### Autores
 - Agnes Bressan de Almeida - 13677100
-- Beatriz Lomes da Silva - 12548038
 - Carolina Elias de Almeida Américo - 13676687
 - Caroline Severiano Clapis - 13861923
-- Pedro Oliveira Torrente - 11798853
+- Rauany Martinez Secci 13721217
+- Rhayna Christiani Vasconcelos Marques Casado 13676429
