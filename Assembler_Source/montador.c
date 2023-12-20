@@ -242,6 +242,9 @@ void DetectarLabels(void)
             case SUBC_CODE :
             case MUL_CODE :
             case DIV_CODE :
+            case PORC_CODE :
+            case FAT_CODE :
+            case POT_CODE :
 	        case LMOD_CODE :	    
             case AND_CODE :
             case OR_CODE :
@@ -484,7 +487,7 @@ void MontarInstrucoes(void)
                     break;
                 
                 /* ==============
-	Loadi Rx, Ry
+	                Loadi Rx, Ry
                    ==============
                 */
                 
@@ -730,7 +733,6 @@ void MontarInstrucoes(void)
                     parser_Write_Inst(str_msg,end_cnt);
                     end_cnt += 1;
                     break;
-
                 /* ==============
                    Sub Rx, Ry, Rz
                    ==============
@@ -836,6 +838,90 @@ void MontarInstrucoes(void)
                     str_tmp2 = ConverteRegistrador(val2);
                     str_tmp3 = ConverteRegistrador(val3);
                     sprintf(str_msg,"%s%s%s%s0",DIV,str_tmp1,str_tmp2,str_tmp3);
+                    free(str_tmp1);
+                    free(str_tmp2);
+                    free(str_tmp3);
+                    parser_Write_Inst(str_msg,end_cnt);
+                    end_cnt += 1;
+                    break;
+
+                /* ==============
+                   Porcentagem Rx, Ry, Rz
+                   ==============
+                */
+
+                case PORC_CODE :
+                    str_tmp1 = parser_GetItem_s();
+                    val1 = BuscaRegistrador(str_tmp1);
+                    free(str_tmp1);
+                    parser_Match(',');
+                    str_tmp2 = parser_GetItem_s();
+                    val2 = BuscaRegistrador(str_tmp2);
+                    free(str_tmp2);
+                    parser_Match(',');
+                    str_tmp3 = parser_GetItem_s();
+                    val3 = BuscaRegistrador(str_tmp3);
+                    free(str_tmp3);
+                    str_tmp1 = ConverteRegistrador(val1);
+                    str_tmp2 = ConverteRegistrador(val2);
+                    str_tmp3 = ConverteRegistrador(val3);
+                    sprintf(str_msg,"%s%s%s%s0",PORC,str_tmp1,str_tmp2,str_tmp3);
+                    free(str_tmp1);
+                    free(str_tmp2);
+                    free(str_tmp3);
+                    parser_Write_Inst(str_msg,end_cnt);
+                    end_cnt += 1;
+                    break;
+
+                /* ==============
+                   Fatorial Rx, Ry, Rz
+                   ==============
+                */
+
+                case FAT_CODE :
+                    str_tmp1 = parser_GetItem_s();
+                    val1 = BuscaRegistrador(str_tmp1);
+                    free(str_tmp1);
+                    parser_Match(',');
+                    str_tmp2 = parser_GetItem_s();
+                    val2 = BuscaRegistrador(str_tmp2);
+                    free(str_tmp2);
+                    parser_Match(',');
+                    //str_tmp3 = parser_GetItem_s();
+                    //val3 = BuscaRegistrador(str_tmp3);
+                    //free(str_tmp3);
+                    str_tmp1 = ConverteRegistrador(val1);
+                    str_tmp2 = ConverteRegistrador(val2);
+                    //str_tmp3 = ConverteRegistrador(val3);
+                    sprintf(str_msg,"%s%s%s0",FAT,str_tmp1,str_tmp2);
+                    free(str_tmp1);
+                    free(str_tmp2);
+                    //free(str_tmp3);
+                    parser_Write_Inst(str_msg,end_cnt);
+                    end_cnt += 1;
+                    break;
+
+                /* ==============
+                   Potencial Rx, Ry, Rz
+                   ==============
+                */
+
+                case POT_CODE :
+                    str_tmp1 = parser_GetItem_s();
+                    val1 = BuscaRegistrador(str_tmp1);
+                    free(str_tmp1);
+                    parser_Match(',');
+                    str_tmp2 = parser_GetItem_s();
+                    val2 = BuscaRegistrador(str_tmp2);
+                    free(str_tmp2);
+                    parser_Match(',');
+                    str_tmp3 = parser_GetItem_s();
+                    val3 = BuscaRegistrador(str_tmp3);
+                    free(str_tmp3);
+                    str_tmp1 = ConverteRegistrador(val1);
+                    str_tmp2 = ConverteRegistrador(val2);
+                    str_tmp3 = ConverteRegistrador(val3);
+                    sprintf(str_msg,"%s%s%s%s0",POT,str_tmp1,str_tmp2,str_tmp3);
                     free(str_tmp1);
                     free(str_tmp2);
                     free(str_tmp3);
@@ -2325,6 +2411,18 @@ int BuscaInstrucao(char * nome)
     else if (strcmp(str_tmp,DIV_STR) == 0)
     {
         return DIV_CODE;
+    }
+    else if (strcmp(str_tmp,PORC_STR) == 0)
+    {
+        return PORC_CODE;
+    }
+    else if (strcmp(str_tmp,FAT_STR) == 0)
+    {
+        return FAT_CODE;
+    }
+    else if (strcmp(str_tmp,POT_STR) == 0)
+    {
+        return POT_CODE;
     }
     else if (strcmp(str_tmp,INC_STR) == 0)
     {

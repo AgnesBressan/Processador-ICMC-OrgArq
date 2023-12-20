@@ -110,6 +110,9 @@
 #define INPUT_CODE              96
 #define OUTPUT_CODE             97
 #define SOUND_CODE              98
+#define PORC_CODE               99
+#define FAT_CODE                100
+#define POT_CODE                110
 
 /* Definicoes dos op codes (binarios em strings) */
 
@@ -123,7 +126,7 @@
 #define MOV             "110011"
 
 /* Peripheric Instructions: */
-#define INPUT	        "111110"
+#define INPUT	          "111110"
 #define OUTPUT          "111111"
 
 /* I/O Instructions: */
@@ -138,6 +141,9 @@
 #define DIV             "100011"
 #define INC             "100100"
 #define LMOD            "100101"
+#define PORC            "100111"
+#define FAT             "101000"
+#define POT             "101001"
 
 
 /* Logic Instructions (All should begin with "01"): */
@@ -215,6 +221,10 @@
 
 #define MUL_STR                 "MUL"
 #define DIV_STR                 "DIV"
+
+#define PORC_STR                "PORC"
+#define FAT_STR                 "FAT"
+#define POT_STR                 "POT"
 
 /* INC */
 #define INC_STR                 "INC"
