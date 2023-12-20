@@ -54,8 +54,8 @@
 #define BNO_CODE                37
 #define JMP_CODE                38
 #define JEQ_CODE                39
-#define JNE_CODE                40
-#define JZ_CODE                 41
+#define JNE_CODE                100
+#define JZ_CODE                 101
 #define JNZ_CODE                42
 #define JC_CODE                 43
 #define JNC_CODE                44
@@ -140,8 +140,8 @@
 #define DIV             "100011"
 #define INC             "100100"
 #define LMOD            "100101"
-#define PORC            "011001"
-#define POT             "011010"
+#define PORC            "101000"
+#define POT             "101001"
 
 
 /* Logic Instructions (All should begin with "01"): */
