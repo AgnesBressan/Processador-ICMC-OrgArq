@@ -1,4 +1,4 @@
-// gcc simple_simulator_Template.c -O3 -march=native -o simulador -Wall -lm
+// gcc simple_simulator.c -O3 -march=native -o simulador -Wall -lm
 // -lm is option to execute math.h library file.
 /*
 Perguntas:
@@ -53,9 +53,9 @@ Do todos os comandos...
 // Data Manipulation:
 #define LOAD 48       // "110000"; -- LOAD Rx END  -- Rx <- M[END]  Format: < inst(6) | Rx(3) | xxxxxxx >  + 16bit END
 #define STORE 49      // "110001"; -- STORE END Rx -- M[END] <- Rx  Format: < inst(6) | Rx(3) | xxxxxxx >  + 16bit END
-#define LOADN 56   // "111000"; -- LOAD Rx Nr  (b0=0)   -- Rx <- Nr    ou   Load SP Nr (b0=1)  -- SP <- Nr    Format: < inst(6) | Rx(3) | xxxxxxb0 >  + 16bit Numero
-#define LOADI 60  // "111100"; -- LOAD Rx Ry   -- Rx <- M[Ry]	Format: < inst(6) | Rx(3) | Ry(3) | xxxx >
-#define STOREI 61 // "111101"; -- STORE Rx Ry  -- M[Rx] <- Ry	Format: < inst(6) | Rx(3) | Ry(3) | xxxx >
+#define LOADIMED 56   // "111000"; -- LOAD Rx Nr  (b0=0)   -- Rx <- Nr    ou   Load SP Nr (b0=1)  -- SP <- Nr    Format: < inst(6) | Rx(3) | xxxxxxb0 >  + 16bit Numero
+#define LOADINDEX 60  // "111100"; -- LOAD Rx Ry   -- Rx <- M[Ry]	Format: < inst(6) | Rx(3) | Ry(3) | xxxx >
+#define STOREINDEX 61 // "111101"; -- STORE Rx Ry  -- M[Rx] <- Ry	Format: < inst(6) | Rx(3) | Ry(3) | xxxx >
 #define MOV	51        // "110011"; -- MOV Rx Ry    -- Rx <- Ry	  	Format: < inst(6) | Rx(3) | Ry(3) | xxxx >
 
 
@@ -72,10 +72,8 @@ Do todos os comandos...
 #define DIV	35      // "100011"; -- DIV Rx Ry Rz 			-- Rx <- Ry / Rz / Rx <- Ry / Rz + C  -- b0=Carry		Format: < inst(6) | Rx(3) | Ry(3) | Rz(3)| C >
 #define INC	36      // "100100"; -- INC Rx / DEC Rx                 		-- Rx <- Rx + 1 / Rx <- Rx - 1  -- b6= INC/DEC : 0/1	Format: < inst(6) | Rx(3) | b6 | xxxxxx >
 #define LMOD 37     // "100101"; -- MOD Rx Ry Rz   			-- Rx <- Ry MOD Rz 	  	Format: < inst(6) | Rx(3) | Ry(3) | Rz(3)| x >
-#define PORC 38		// "100110"; -- PORC Rx Ry Rz           -- Rx <- (Ry * Rz) / 100 
-#define POT 39		// "101000"; -- POT Rx Ry Rz            -- Rx <- Ry^{Ry} 
-
-
+#define PORC 40		// "101000"; -- PORC Rx Ry Rz           -- Rx <- (Ry * Rz) / 100 
+#define POT 41		// "101001"; -- POT Rx Ry Rz            -- Rx <- Ry^{Ry} 
 
 // Logic Instructions (All should begin wiht "01"):
 #define LOGIC 1
@@ -343,7 +341,7 @@ loop:
 					state=STATE_FETCH;
 					break;
 
-				case LOADN:
+				case LOADIMED:
 					// reg[rx] = mem[PC];
 					// PC++;
 					selM1 = sPC;
@@ -358,66 +356,119 @@ loop:
 				case LOAD:
 					// MAR = MEMORY[PC];
 					// PC++;
-
+					selM1 = sPC;
+					RW = 0;
+					LoadMAR = 1; 
+					IncPC = 1;
 					// -----------------------------
 					state=STATE_EXECUTE;
+					break;
+
+				case LOADINDEX:
+					// reg[rx] = MEMORY[reg[ry]];
+					selM4 = ry;
+					selM1 = sM4;
+					RW = 0;
+					selM2 = sDATA_OUT;
+					LoadReg[rx] = 1;
+					// -----------------------------
+					state=STATE_FETCH;
 					break;
 
 				case STORE:
 					//MAR = MEMORY[PC];
 					//PC++;
-					
+					selM1 = sPC;
+					RW = 0;
+					LoadMAR = 1; 
+					IncPC = 1;   
 					// -----------------------------
 					state=STATE_EXECUTE;
 					break;
 
-				case LOADI:
-					// reg[rx] = MEMORY[reg[ry]];
-					
-					// -----------------------------
-					state=STATE_FETCH;
-					break;
-
-				case STOREI:
+				case STOREINDEX:
 					//mem[reg[rx]] = reg[ry];
-					
+					selM4 = rx;
+					selM1 = sM4;
+					RW = 1;
+					selM3 = ry;
+					selM5 = sM3;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case MOV:
-					
+					switch(pega_pedaco(IR,1,0))
+					{ case 0:
+						// reg[rx] = reg[ry];
+						selM4 = ry;
+						selM2 = sM4;
+						LoadReg[rx] = 1;
+						break;
+					  case 1:
+						// reg[rx] = SP;
+						selM2 = sSP;
+						LoadReg[rx] = 1;
+						break;
+					  case 2:
+						// SP = reg[rx];
+						selM4 = rx;
+						LoadSP = 1;
+						break;
+					}
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case ADD:
+				case POT:
+				case PORC:
 				case SUB:
 				case MULT:
 				case DIV:
 				case LMOD:
-				case PORC:
-				case POT:
 				case LAND:
 				case LOR:
 				case LXOR:
 				case LNOT:
 					// reg[rx] = reg[ry] + reg[rz]; // Soma ou outra operacao
-					
+					selM3 = ry;
+					selM4 = rz;
+					OP = pega_pedaco(IR,15,10);
+					carry = pega_pedaco(IR,0,0);
+					selM2 = sULA;
+					LoadReg[rx] = 1;
+					selM6 = sULA;
+					LoadFR  = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case INC:
 					//reg[rx]++;                                  // Inc Rx ou DEC
-					
+					selM3 = rx;
+					selM4 = 8;  // 8 para selecionar o nr. 1 como entrada do MUX4
+
+					if(pega_pedaco(IR,6,6) == 0) OP = ADD;  // Se IR6 = 0 --> INC
+					else OP = SUB;                          // Se IR6 = 1 --> DEC
+
+					carry = 0;
+					selM2 = sULA;
+					LoadReg[rx] = 1;
+					selM6 = sULA;
+					LoadFR  = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case CMP:   // seta 3 flags: maior, menor ou igual
 					//if(rx == ry)
-					
+					selM3 = rx;
+					selM4 = ry;
+					OP = pega_pedaco(IR,15,10);
+					carry = 0;
+					selM6 = sULA;
+					LoadFR  = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
@@ -475,27 +526,68 @@ loop:
 					break;
 
 				case CALL:
-					
-					state=STATE_FETCH;
+					COND = pega_pedaco(IR,9,6);
+
+					if( (COND == 0) 											  // NO COND
+							|| (FR[0]==1 && (COND==7))                            // GREATER
+							|| ((FR[2]==1 || FR[0]==1) && (COND==9))  			  // GREATER EQUAL
+							|| (FR[1]==1 && (COND==8))                            // LESSER
+							|| ((FR[2]==1 || FR[1]==1) && (COND==10)) 			  // LESSER EQUAL
+							|| (FR[2]==1 && (COND==1))                            // EQUAL
+							|| (FR[2]==0 && (COND==2))  						  // NOT EQUAL
+							|| (FR[3]==1 && (COND==3))  						  // ZERO
+							|| (FR[3]==0 && (COND==4))  						  // NOT ZERO
+							|| (FR[4]==1 && (COND==5))  						  // CARRY
+							|| (FR[4]==0 && (COND==6))  						  // NOT CARRY
+							|| (FR[5]==1 && (COND==11)) 						  // OVERFLOW
+							|| (FR[5]==0 && (COND==12)) 						  // NOT OVERFLOW
+							|| (FR[6]==1 && (COND==14)) 						  // NEGATIVO
+							|| (FR[9]==1 && (COND==13))) { 						  // DIVBYZERO
+						// MEMORY[SP] = PC;
+						// SP--;
+						// PC = MEMORY[PC];
+
+						RW = 1;
+						selM1 = sSP;
+						selM5 = sPC;
+						DecSP = 1;   
+						state=STATE_EXECUTE;
+					}
+					else {
+						//PC++;
+						IncPC = 1;
+						state=STATE_FETCH;
+					}
 					// -----------------------------
 					break;
 
 				case PUSH:
-					
+					selM1 = sSP;
+					RW = 1;
+
+					if(pega_pedaco(IR,6,6) == 0) // Registrador
+						//MEMORY[SP] = reg[rx];
+						selM3 = rx;            
+					else  // FR
+						selM3 = 8;  // com 8 entra o FR no M3
+
+					selM5 = sM3;
+					DecSP = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case POP:
 					//SP++;
-					
+					IncSP = 1;
+
 					// -----------------------------
 					state=STATE_EXECUTE;
 					break;
 
 				case RTS:
 					// SP++;
-					
+					IncSP = 1;
 					// -----------------------------
 					state=STATE_EXECUTE;
 					break;
@@ -536,39 +628,69 @@ loop:
 			switch(opcode){
 				case LOAD:
 					//reg[rx] = MEMORY[MAR];
-
+					selM1 = sMAR;
+					RW = 0;
+					selM2 = sDATA_OUT;
+					LoadReg[rx] = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
 
 				case STORE:
 					//MEMORY[MAR] = reg[rx];
-
+					selM1 = sMAR;
+					RW = 1;
+					selM3 = rx;
+					selM5 = sM3;
 					// -----------------------------
 					state=STATE_FETCH;
 					break; 
 
 				case CALL:
-
+					selM1 = sPC;
+					RW = 0;
+					LoadPC = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break; 
 
 				case POP:
-					
+					selM1 = sSP;
+					RW = 0;
+					if(pega_pedaco(IR,6,6) == 0) { // Registrador
+						//reg[rx] = MEMORY[SP];
+						selM2 = sDATA_OUT;
+						LoadReg[rx] = 1;
+					}
+					else { // FR
+						selM6 = sDATA_OUT;
+						LoadFR = 1;
+					}
 					// -----------------------------
 					state=STATE_FETCH;
 					break; 
 
 				case RTS:
 					//PC = MEMORY[SP];
-					
+					selM1 = sSP;
+					RW = 0;
+					LoadPC = 1;
 					// -----------------------------
 					state=STATE_EXECUTE2;
 					break;
 
 				case PUSH:
-					
+					selM1 = sSP;
+					RW = 1;
+
+					if(pega_pedaco(IR,6,6) == 0) // Registrador
+						//MEMORY[SP] = reg[rx];
+						selM3 = rx;            
+					else  // FR
+						selM3 = 8;  // com 8 entra o FR no M3
+
+					selM5 = sM3;
+					DecSP = 1;
 					// -----------------------------
 					state=STATE_FETCH;
 					break;
@@ -583,7 +705,7 @@ loop:
 
 			//case RTS:
 			//PC++;
-			
+			IncPC = 1;
 			// -----------------------------
 			state=STATE_FETCH;
 			break;
@@ -808,7 +930,16 @@ ResultadoUla ULA(unsigned int x, unsigned int y, unsigned int OP, int carry) {
 						result = x/y;
 						auxFRbits[DIV_BY_ZERO] = 0;
 					}
-					break;	
+					break;
+				case PORC:
+					result = (x*y)/100;
+					break;
+				case POT:
+					result = x;
+					for(int i = 1; i < y; i++)
+						result *= x;
+					break;
+					
 				case LMOD:
 					if(y==0) {
 						result = 0;
@@ -817,15 +948,7 @@ ResultadoUla ULA(unsigned int x, unsigned int y, unsigned int OP, int carry) {
 						result = x%y;
 						auxFRbits[DIV_BY_ZERO] = 0;
 					}
-					break;
-				case PORC:
-					result = (x*y)/0b1100100;
-					break;
-				case POT:
-					result = x;
-					for(int i = 1; i < y; i++)
-						result *= x;
-					break;
+					break;	
 				default:
 					result = x;
 			}

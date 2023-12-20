@@ -23,16 +23,8 @@
 	loadn r4, #'D'
 	add r3, r4, r3
 	loadn r0, #3
-	outchar r3, r0		; Printa K na linha 3
+	outchar r3, r0		; Printa X na linha 3
 
-	; Teste do Fat
-	loadn r1, #3
-	loadn r4, #2
-	mul r2, r1, r4
-	loadn r3, #'A'
-	add r2, r2, r3
-	loadn r0, #5
-	outchar r2, r0		; Printa G na linha 5
 
 
 Fim:	
