@@ -18,8 +18,8 @@
 #define DIV	35
 #define INC	36
 #define LMOD 37
-#define PORC 38
-#define POT	39
+#define PORC 40
+#define POT	41
 #define LAND 18
 #define LOR 19
 #define LXOR 20
