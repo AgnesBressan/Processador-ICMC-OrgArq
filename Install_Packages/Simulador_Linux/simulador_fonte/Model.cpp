@@ -755,50 +755,34 @@ void Model::processador()
         break;
 	
 	  case PORC:
-		reg[rx] = (reg[ry]*reg[rz])/1100100;
+			reg[rx] = (reg[ry]*reg[rz])/0b1100100;
 
-		// if(!reg[rx])
-		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
-        // else
-        // 	if(reg[rx] > 0xffff)
-		// 	FR[5] = 1;  // Arithmetic Overflow
+			if(!reg[rx])
+				FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+			else
+				if(reg[rx] > 0xffff)
+				FR[5] = 1;  // Arithmetic Overflow
 
-        break;
-
-			
-	   case FAT:
-		reg[rx] = reg[ry];
-
-		// for(int i = 1; i < reg[ry]; i++)
-		// 	reg[rx] *= (reg[ry]-i);
-
-		// if(!reg[rx])
-		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
-        // else
-        // 	if(reg[rx] > 0xffff)
-		// 	FR[5] = 1;  // Arithmetic Overflow
-		break;
+			break;
 			
 	   case POT:
-		reg[rx] = reg[ry];
-		// for(int i = 1; i < reg[rz]; i++)
-		// 	reg[rx] *= reg[ry];
+			reg[rx] = pow(reg[ry],reg[rz]);
 
-		// if(!reg[rx])
-		// 	FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
-        // else
-        // 	if(reg[rx] > 0xffff)
-		// 	FR[5] = 1;  // Arithmetic Overflow
-		break;
+			if(!reg[rx])
+				FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+			else
+				if(reg[rx] > 0xffff)
+				FR[5] = 1;  // Arithmetic Overflow
+			break;
 
       case LMOD:
-        reg[rx] = reg[ry] % reg[rz];
+			reg[rx] = reg[ry] % reg[rz];
 
-				FR[3] = 0; // -- FR = <...|zero|equal|lesser|greater>
+					FR[3] = 0; // -- FR = <...|zero|equal|lesser|greater>
 
-        if(!reg[rx])
-					FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
-				break;
+			if(!reg[rx])
+						FR[3] = 1;  // Se resultado = 0, seta o Flag de Zero
+					break;
 
       case INC:
 				reg[rx]++;									// Inc Rx

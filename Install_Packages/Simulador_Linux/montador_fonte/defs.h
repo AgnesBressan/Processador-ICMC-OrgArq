@@ -31,8 +31,8 @@
 #define ROTL_CODE               22
 #define ROTR_CODE               23
 #define CMP_CODE                24
-#define BRA_CODE                25
-#define BEQ_CODE                26
+#define BRA_CODE                100
+#define BEQ_CODE                200
 #define BNE_CODE                27
 #define BZ_CODE                 28
 #define BNZ_CODE                29
@@ -101,9 +101,8 @@
 #define NOP_CODE                0
 #define INPUT_CODE              96
 #define OUTPUT_CODE             97
-#define PORC_CODE               98
-#define FAT_CODE                99
-#define POT_CODE                100
+#define PORC_CODE               99
+#define POT_CODE                26
 
 /* Definicoes dos op codes (binarios em strings) */
 
@@ -132,8 +131,7 @@
 #define INC             "100100"
 #define LMOD            "100101"
 #define PORC            "100111"
-#define FAT             "101000"
-#define POT             "101001"
+#define POT             "101000"
 
 
 /* Logic Instructions (All should begin with "01"): */
@@ -212,7 +210,6 @@
 #define DIV_STR                 "DIV"
 
 #define PORC_STR                "PORC"
-#define FAT_STR                 "FAT"
 #define POT_STR                 "POT"
 
 /* INC */

@@ -73,8 +73,7 @@ Do todos os comandos...
 #define INC	36      // "100100"; -- INC Rx / DEC Rx                 		-- Rx <- Rx + 1 / Rx <- Rx - 1  -- b6= INC/DEC : 0/1	Format: < inst(6) | Rx(3) | b6 | xxxxxx >
 #define LMOD 37     // "100101"; -- MOD Rx Ry Rz   			-- Rx <- Ry MOD Rz 	  	Format: < inst(6) | Rx(3) | Ry(3) | Rz(3)| x >
 #define PORC 38		// "100110"; -- PORC Rx Ry Rz           -- Rx <- (Ry * Rz) / 100 
-#define FAT 39		// "100111"; -- FAT Rx Ry               -- Rx <- (Ry)! 
-#define POT 40		// "101000"; -- POT Rx Ry Rz            -- Rx <- Ry^{Ry} 
+#define POT 39		// "101000"; -- POT Rx Ry Rz            -- Rx <- Ry^{Ry} 
 
 
 
@@ -398,7 +397,6 @@ loop:
 				case DIV:
 				case LMOD:
 				case PORC:
-				case FAT:
 				case POT:
 				case LAND:
 				case LOR:
@@ -821,12 +819,7 @@ ResultadoUla ULA(unsigned int x, unsigned int y, unsigned int OP, int carry) {
 					}
 					break;
 				case PORC:
-					result = (x*y)/1100100;
-					break;
-				case FAT:
-					result = x;
-					for(int i = 1; i < x; i++)
-						result *= (x-i);
+					result = (x*y)/0b1100100;
 					break;
 				case POT:
 					result = x;

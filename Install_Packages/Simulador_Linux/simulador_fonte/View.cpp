@@ -307,7 +307,6 @@ void View::show_program(int linha, int pc, int sp)
     case MULT: sprintf(texto, "PC: %05d\t|	MULT R%d, R%d, R%d		|	R%d <- R%d * R%d", 	pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
     case DIV:	 sprintf(texto, "PC: %05d\t|	DIV R%d, R%d, R%d		|	R%d <- R%d / R%d", 		pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
     case PORC:	 sprintf(texto, "PC: %05d\t|	PORC R%d, R%d, R%d		|	R%d <- (R%d * R%d)/100", 		pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
-    case FAT:	 sprintf(texto, "PC: %05d\t|	FAT R%d, R%d			|	R%d <- (R%d)!", 		pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
     case POT:	 sprintf(texto, "PC: %05d\t|	POT R%d, R%d, R%d		|	R%d <- R%d^{R%d}", 		pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
     case LMOD: sprintf(texto, "PC: %05d\t|	MOD R%d, R%d, R%d		|	R%d <- R%d %% R%d", 	pc, _rx, _ry, _rz, _rx, _ry, _rz); break;
     case INC:

@@ -20,7 +20,6 @@
 #define LMOD 37
 #define PORC 38
 #define POT	39
-#define FAT	40
 #define LAND 18
 #define LOR 19
 #define LXOR 20
