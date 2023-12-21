@@ -5,7 +5,8 @@
 O objetivo do projeto é complementar um simulador com novas funções matemáticas.
 Este projeto foi realizado na disciplina **SCC0902- Organização e Arquitetura de Computadores** para fins educacionais.
 
- Link da apresentação: https://drive.google.com/drive/folders/1PWK-j8cHho9wQX0x4KLAQ9MhGMHM52Xn
+ Link da apresentação: https://drive.google.com/drive/folders/1EmUfh_bPj2l_n2I_FT1Aszvgh8Z_tpeF
+
 ## Função Porcentagem
 Sua implementação é essencial em finanças, estatísticas e análises, proporcionando uma maneira eficaz de representar e comparar partes relativas em diferentes contextos, desde descontos comerciais até variações percentuais em dados estatísticos.
 
