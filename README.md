@@ -16,7 +16,7 @@ Essa operação é fundamental em diversos contextos, como cálculos matemático
     # Gerando o montador
     $ cd Install_Packages/Simulador_Linux/montador_fonte
     $ gcc *.c -o montador
-    # Mova o arquivo gerado montador.o para o diretorio em que está seu código assembly (Install_Packages/Simulador_Linux/Exemplos)
+    # Mova o arquivo gerado montador para o diretorio em que está seu código assembly (Install_Packages/Simulador_Linux/Exemplos)
 ```
 
 ```bash
