@@ -7,9 +7,6 @@ Este projeto foi realizado na disciplina **SCC0902- Organização e Arquitetura 
 
 Link da apresentação: https://drive.google.com/drive/u/1/folders/1VyynIOEV-bIQ0LkhiF9ehYCUALBi_wAo
 
-## Função Fatorial
-Essa função é valiosa em combinações e permutações, sendo amplamente usada em estatísticas, probabilidade e algoritmos. A implementação do fatorial é essencial para resolver problemas que envolvem arranjos e combinações em diversas disciplinas.
-
 ## Função Porcentagem
 Sua implementação é essencial em finanças, estatísticas e análises, proporcionando uma maneira eficaz de representar e comparar partes relativas em diferentes contextos, desde descontos comerciais até variações percentuais em dados estatísticos.
 
